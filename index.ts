@@ -54,7 +54,7 @@ async function handler(){
     // res.status(500).json({ error: err.message || 'Internal error' });
   }
 };
-handler()
+// handler()
 
 async function summarizeConversation(text: string) {
   const chat = await openai.chat.completions.create({
@@ -74,6 +74,19 @@ async function summarizeConversation(text: string) {
   const summary = chat.choices[0].message.content;
   console.log("Ringkasan Percakapan:\n", summary);
 }
+// Baca file
+fs.readFile('transkripsi.json', 'utf8', (err, data) => {
+  if (err) throw err;
+  
+  // Parse JSON
+  const transcriptionData = JSON.parse(data);
+  const textToSummarize = transcriptionData.text;
+  
+  // Kirim ke LLM
+  summarizeConversation(textToSummarize);
+  console.log();
+
+});
 // app.post('/upload-audio', upload.single('audio'), handler);
 
 // app.listen(port, () => {
